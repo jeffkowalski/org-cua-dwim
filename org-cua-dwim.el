@@ -8,7 +8,7 @@
 ;; Version: 0.5
 ;; Last-Updated: Sat Sep 20 2014
 ;;           By: Jeff Kowalski
-;;     Update #: 218.1
+;;     Update #: 218.2
 ;; URL:
 ;; Keywords: org-mode cua-mode
 ;; Compatibility: Emacs 23
@@ -32,7 +32,7 @@
 ;;; Change Log:
 ;; 20-Sep-2014    Jeff Kowalski
 ;;    Last-Updated: Sat Sep 20          2014              (Jeff Kowalski)
-;;    Added defvars for some local variables to quiet byte-compiler
+;;    Remove unused variables to quiet byte compiler
 ;; 02-Feb-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Feb  2 23:27:14 2012 (-0600) #216 (Matthew L. Fidler)
 ;;    Turned off automatic activation.
@@ -99,15 +99,11 @@ shift-selection-mode is available."
 (defvar org-cua-dwim-was-move nil)
 (defvar org-cua-dwim-debug nil)
 (defvar org-cua-dwim t)
-(defvar org-cua-dwim-shift-translated)
-(defvar cua--last-region-shifted)
-(defvar cua--explicit-region-start)
 
 (defadvice handle-shift-selection (around org-cua-dwim)
   (let ((is-org-mode (and (not (minibufferp))
                           (eq major-mode 'org-mode)))
         (do-it t))
-    (setq org-cua-dwim-shift-translated this-command-keys-shift-translated)
     (when (and org-cua-dwim
                is-org-mode this-command-keys-shift-translated
                (not org-cua-dwim-was-move))
@@ -115,8 +111,6 @@ shift-selection-mode is available."
         (message "Turn ON shift-select-mode & delete-selection-mode"))
       (delete-selection-mode 1)
       (set (make-local-variable 'org-cua-dwim-was-move) t)
-      (set (make-local-variable 'cua--last-region-shifted) t)
-      (set (make-local-variable 'cua--explicit-region-start) nil)
       (set (make-local-variable 'shift-select-mode) t)
       (set (make-local-variable 'cua-mode) nil))
     (when (and org-cua-dwim
